@@ -2,73 +2,70 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="
+	width=device-width,
+	initial-scale=1"
 	<title>
-		Canvas
-	</title>
-	<style type="text/css">
-		body{
-			width: 100%;
-		}
+	<style type ="text/css">
 		canvas{
-			background-color: rgb(199, 181, 181);
-			margin: auto; 
-		} 
+			background-color: rgb(250,250,250);
+		}
 	</style>
-</head>
+	</title>
+</head
 <body>
 	<canvas id="mycanvas" width="500" height="500">
 		Tu navegador no soporta canvas
 	</canvas>
 
-	<script type="text/javascript">
-		
-		var cv = document.getElementById('mycanvas');
-		var ctx = cv.getContext('2d');
+	<script type ="text/javascript">
 
-		//cuadrado
-		ctx.fillStyle = "rgb(200,0,0)";
-		ctx.fillRect(10,10,55,50);
+	var cv = document.getElementById('mycanvas');
+	var ctx = cv.getContext('2d');
 
-		ctx.fillStyle = "rgba(0,0,200,0.5)"
-		ctx.fillRect(30,30,55,50);
+	//cuadrados
+	ctx.fillStyle = "rgb(100,120,200)";
+	ctx.fillRect(10,10,65,65);
 
-		//líneas
-		ctx.moveTo(0,0);
-		ctx.lineTo(250,250);
-		ctx.stroke();
+	ctx.fillStyle = "rgb(200,0,0)";
+	ctx.fillRect(60,60,65,65);
 
-		ctx.moveTo(150,150);
-		ctx.lineTo(300,250);
-		ctx.lineTo(250,300);
-		ctx.lineTo(150,150);
-		ctx.stroke();  
+	ctx.fillStyle ="rgba(220,0,200,0.5)";
+	ctx.fillRect(110,110,65,65);
 
+	//lineas
+	ctx.moveTo(340,20);
+	ctx.lineTo(140,300);
+	ctx.stroke();
 
-		//arc
-		ctx.beginPath();
-		ctx.arc(250,250,100,0,1.5*Math.PI);
-		ctx.fill();
+	//triangulo
+	ctx.fillStyle="rgb(20,50,120)";
 
-		//text
-		ctx.font = "30px Arial";
-		ctx.fillText("Jonatan Soto",150,30)
+	ctx.moveTo(150,20);
+	ctx.lineTo(300,20);
+	ctx.lineTo(70,300);
+	ctx.fill();
 
-		ctx.strokeText("Otro gato",150,80);
+	//circulos
+	ctx.fillStyle="red";
+	ctx.strokeStyle="red";
+
+	ctx.beginPath();
+	ctx.arc(400,70,50,0,2*Math.PI);
+	ctx.stroke();
+
+	ctx.beginPath();
+	ctx.arc(525,70,50,0,2*Math.PI);
+	ctx.fill();
+
+	//texto
+	ctx.fillStyle="blue";
+	ctx.strokeStyle="blue";
+	
+	ctx.font = "30px Arial";
+	ctx.fillText("Kevin Lizárraga B)",180,150);
+	ctx.strokeText("Kevin Lizárraga B)",180,200);
 
 	</script>
-
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
