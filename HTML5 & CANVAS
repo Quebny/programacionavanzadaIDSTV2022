@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="
+	width=device-width,
+	initial-scale=1"
+	<title>
+	<style type ="text/css">
+		canvas{
+			background-color: rgb(150,200,250);
+		}
+	</style>
+	</title>
+</head
+<body>
+	<canvas id="mycanvas" width="500" height="500">
+		Tu navegador no soporta canvas
+	</canvas>
+
+    <img onload="draw()" src = "candado.png" id="imagen"> 
+    
+	<script type ="text/javascript">
+        //style="display: none"
+        var cv = document.getElementById('mycanvas');
+	    var ctx = cv.getContext('2d');
+        var color = "red";
+        var fig = "arc"
+       
+        //gradiante linear
+	    var grd = ctx.createLinearGradient(0,0,200,0);
+        grd.addColorStop(0,"red");
+        grd.addColorStop(1,"purple");
+   
+        ctx.fillStyle = grd;
+        ctx.fillRect(30,200,200,100);
+
+
+        //gradiante circular
+        grd = ctx.createRadialGradient(75, 50, 5, 100, 100, 100);
+        grd.addColorStop(0,"red");
+        grd.addColorStop(1,"purple");
+
+        ctx.fillStyle = grd;
+        ctx.fillRect(0,0,200,150);
+
+
+        //pintar imagen 
+        var img = document.getElementById("imagen");
+        ctx.drawImage(img,0,0,64,64);
+        function draw() {
+            ctx.drawImage(img,50,50,100,100);
+        }
+
+
+        //click
+        
+        cv.addEventListener('click',function(e){
+            if (fig=='rec'){
+                ctx.beginPath();
+                ctx.arc(e.offsetX,e.offsetY,30,0,2*Math.PI);
+                ctx.stroke();
+                ctx.fill();
+            }else{
+                ctx.fillRect(e.offsetX-20,e.offsetY-20,50,50);
+                ctx.strokeRect(e.offsetX-20,e.offsetY-20,50,50);
+            }
+            //ctx.fillStyle = "rgba(10,10,150,0.5)"
+        });
+
+        function random_rgba() {
+            var o = Math.round, r = Math.random, s = 255;
+            return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
+        }
+
+        cv.addEventListener('mouseover',function(e){
+            ctx.fillStyle = random_rgba()
+        });   
+
+        cv.addEventListener('mouseout',function(e){
+            fig = (fig=='arc')?'rec':'arc';        
+        });
+   
+   </script>
+</body>
+</html>
