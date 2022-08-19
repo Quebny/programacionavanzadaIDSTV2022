@@ -27,7 +27,16 @@
 	var player1 = null;
 	var super_x = 240, super_y = 240;
 
-	
+	//pintar con mouse
+	cv.addEventListener('mousemove',function(e){
+		if (move == true) 
+		{
+        		ctx.fillStyle = "black";
+			ctx.fillRect(e.offsetX-5,e.offsetY-5,5,5);
+		} else {
+		move = false;
+		}
+        });
 
 	function start(){
 		cv = document.getElementById('mycanvas');
