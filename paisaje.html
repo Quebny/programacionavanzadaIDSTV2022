@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <style type ="text/css">
+        canvas{
+            background-color: rgb(250, 234, 216);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="mycanvas" width="590" height="580">
+		Tu navegador no soporta canvas
+	</canvas>
+
+	<script type ="text/javascript">
+        var cv = document.getElementById('mycanvas');
+		var ctx = cv.getContext('2d'); 
+
+        
+        //1
+        ctx.fillStyle = "rgb(242, 162, 40 )"
+        ctx.beginPath();
+        ctx.arc(400,400,300,0,2*Math.PI);
+        ctx.fill();
+
+        //Rayos
+        ctx.moveTo(92,304);
+        ctx.lineTo(18,257);
+        ctx.lineTo(39,210);
+        ctx.lineTo(105,267);
+        ctx.lineTo(92,304);
+        ctx.fill();
+
+        ctx.moveTo(123,211);
+        ctx.lineTo(60,170);
+        ctx.lineTo(91,131);
+        ctx.lineTo(144,180);
+        ctx.lineTo(123,211);
+        ctx.fill();
+
+        ctx.moveTo(186,155);
+        ctx.lineTo(141,99);
+        ctx.lineTo(179,79);
+        ctx.lineTo(212,134);
+        ctx.lineTo(186,155);
+        ctx.fill();
+
+        ctx.moveTo(226,61);
+        ctx.lineTo(254,48);
+        ctx.lineTo(280,106);
+        ctx.lineTo(248,116);
+        ctx.lineTo(226,61);
+        ctx.fill();
+
+        ctx.moveTo(310,38);
+        ctx.lineTo(350,31);
+        ctx.lineTo(357,81);
+        ctx.lineTo(320,90);
+        ctx.lineTo(310,38);
+        ctx.fill();
+        
+        ctx.moveTo(397,26);
+        ctx.lineTo(433,28);
+        ctx.lineTo(429,84);
+        ctx.lineTo(393,79);
+        ctx.lineTo(397,26);
+        ctx.fill();
+
+        ctx.moveTo(470,93);
+        ctx.lineTo(477,34);
+        ctx.lineTo(514,44);
+        ctx.lineTo(510,100);
+        ctx.lineTo(470,93);
+        ctx.fill();
+
+        ctx.moveTo(551,113);
+        ctx.lineTo(557,56);
+        ctx.lineTo(584,70);
+        ctx.lineTo(581,129);
+        ctx.lineTo(551,113);
+        ctx.fill();
+        
+        //2
+        ctx.fillStyle = "rgb(171, 65, 14)"
+
+        ctx.beginPath();
+        ctx.arc(700,500,300,0,2*Math.PI);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(450,650,300,0,2*Math.PI);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(300,680,300,0,2*Math.PI);
+        ctx.fill();
+
+        //3
+        ctx.fillStyle = "rgb(61, 23, 15)"
+
+        ctx.beginPath();
+        ctx.arc(-100,600,300,0,2*Math.PI);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(130,710,300,0,2*Math.PI);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(300,750,300,0,2*Math.PI);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(300,750,300,0,2*Math.PI);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(630,800,300,0,2*Math.PI);
+        ctx.fill();
+
+        
+
+        cv.addEventListener('click',function(e){
+            console.log("X: " + e.offsetX + " Y: "+ e.offsetY);
+        });
+    </script>
+</body>
+</html>
