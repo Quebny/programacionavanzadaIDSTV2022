@@ -21,22 +21,22 @@
 	<script type ="text/javascript">
         //style="display: none"
 
-	
+
 	var cv = null;
 	var ctx = null;
 	var player1 = null;
+    var player2 = null;
 	var super_x = 240, super_y = 240;
+    var direction = 'right';
+    var score = 0;
+    var speed = 10;
 
-	//pintar con mouse
-	cv.addEventListener('mousemove',function(e){
-		if (move == true) 
-		{
-        		ctx.fillStyle = "black";
-			ctx.fillRect(e.offsetX-5,e.offsetY-5,5,5);
-		} else {
-		move = false;
-		}
-        });
+    function getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
 
 	function start(){
 		cv = document.getElementById('mycanvas');
@@ -44,37 +44,35 @@
 
 		player1 = new Cuadrado(super_x,super_y,40,40,"red");		
 
+        player2 = new Cuadrado(getRandomInt(10,480),getRandomInt(10,480),40,40,"blue");
 		paint();
 	}
-	
-	
 
-        
+
 	var move = false;
-	
+
 
 	//eventos de teclado
 	document.addEventListener('keydown',function(e){
 		//arriba
 		if (e.keyCode == 87 || e.keyCode==38){
-			super_y -= 10;
+			direction = 'up';
 		}
 
 		//abajo
 		if (e.keyCode == 83 || e.keyCode==40){
-			super_y += 10;
+			direction = 'down';
 		}
 
 		//izquierda
 		if (e.keyCode == 65 || e.keyCode==37){
-			super_x -= 10;
+			direction = 'left';
 		}
 
 		//derecha
 		if (e.keyCode == 68 || e.keyCode==39){
-			super_x += 10;
+			direction = 'right';
 		}
-		paint();
 	});
 
 	function Cuadrado(x,y,w,h,c){
@@ -89,6 +87,16 @@
 			ctx.strokeRect(this.x,this.y,this.w,this.h);
 			ctx.fillRect(this.x,this.y,this.w,this.h);
 		}
+
+        this.se_tocan = function (target) { 
+        if(this.x < target.x + target.w &&
+        this.x + this.w > target.x && 
+        this.y < target.y + target.h && 
+        this.y + this.h > target.y){
+            return true;  
+        }  
+
+    };
 	}
 
 	function paint(){
@@ -97,19 +105,53 @@
 		ctx.fillStyle = "rgb(150,200,250)";
 		ctx.fillRect(0,0,500,500);	
 
+        ctx.fillStyle = "black";
+        ctx.fillText("SCORE: "+score,50,50);
+
 		player1.dibujar(ctx);
-		//ctx.fillStyle = "red";
-		//ctx.strokeRect(super_x,super_y,40,40);
-		//ctx.fillRect(super_x,super_y,40,40);
+
+        player2.dibujar(ctx);
 
 		update();
 	}
 
+    
+
 	function update(){
-		player1.x += 10;
-		if (player1.x > 500){
-			player1.x = 0;
-		}
+        if (direction == 'right'){
+            player1.x += speed;
+		    if (player1.x > 500){
+			    player1.x = 0;
+		    }
+        }
+
+        if (direction == 'left'){
+            player1.x -= speed;
+		    if (player1.x < 0){
+			    player1.x = 500;
+		    }
+        }
+
+        if (direction == 'up'){
+            player1.y -= speed;
+		    if (player1.y < 0){
+			    player1.y = 500;
+		    }
+        }
+
+        if (direction == 'down'){
+            player1.y += speed;
+		    if (player1.y > 500){
+			    player1.y = 0;
+		    }
+        }
+        
+        if (player1.se_tocan(player2)){
+            player2.x = getRandomInt(10,480);
+            player2.y = getRandomInt(10,480); 
+            score += 5;
+            speed += 2;
+        }
 	}
 
 	window.addEventListener('load',start);
