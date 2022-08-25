@@ -1,188 +1,217 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="
+    <meta charset="utf-8">
+    <meta name="viewport" content="
 	width=device-width,
-	initial-scale=1"
-	<title>
-	<style type ="text/css">
-		canvas{
-			background-color: rgb(150,200,250);
-		}
-	</style>
-	</title>
-</head
-<body>
-	<canvas id="mycanvas" width="500" height="500">
-		Tu navegador no soporta canvas
-	</canvas>
+	initial-scale=1" <title>
+    <style type="text/css">
+        canvas {
+            background-color: rgb(150, 200, 250);
+        }
+    </style>
+    </title>
+</head <body>
+<canvas id="mycanvas" width="1000" height="800">
+    Tu navegador no soporta canvas
+</canvas>
 
-	<script type ="text/javascript">
-        //style="display: none"
+<script type="text/javascript">
+    //style="display: none"
 
 
-	var cv = null;
-	var ctx = null;
-	var player1 = null;
+    var cv = null;
+    var ctx = null;
+    var player1 = null;
     var player2 = null;
-	var super_x = 240, super_y = 240;
+    var super_x = 240, super_y = 240;
     var direction = 'right';
     var score = 0;
-    var speed = 10;
+    var speed = 5;
     var pause = false;
+
+    var width = 1000;
+    var height = 800;
+
+    var obs_1, obs_2, obs_3, obs_4;
+    var obstaculos;
+    
 
     function getRandomInt(min, max) {
         min = Math.ceil(min);
         max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
 
-	function start(){
-		cv = document.getElementById('mycanvas');
-		ctx = cv.getContext('2d')
+    function start() {
+        cv = document.getElementById('mycanvas');
+        ctx = cv.getContext('2d')
 
-		player1 = new Cuadrado(super_x,super_y,40,40,"red");		
+        player1 = new Cuadrado(super_x, super_y, 40, 40, "red", false);
 
-        player2 = new Cuadrado(getRandomInt(10,480),getRandomInt(10,480),40,40,"blue");
-		paint();
-	}
+        player2 = new Cuadrado(getRandomInt(10, 480), getRandomInt(10, 480), 40, 40, "blue", false);
+
+        obs_1 = new Cuadrado(270, 100, 500, 40, "black", true);
+        obs_2 = new Cuadrado(120, 270, 40, 200, "black", true);
+        obs_3 = new Cuadrado(820, 270, 40, 200, "black", true);
+        obs_4 = new Cuadrado(270, 600, 500, 40, "black", true);
+
+        obstaculos = [obs_1, obs_2, obs_3, obs_4];
+
+        paint();
+    }
+
+    
+    var move = false;
 
 
-	var move = false;
+    //eventos de teclado
+    document.addEventListener('keydown', function (e) {
+        //arriba
+        if (e.keyCode == 87 || e.keyCode == 38) {
+            direction = 'up';
+        }
 
+        //abajo
+        if (e.keyCode == 83 || e.keyCode == 40) {
+            direction = 'down';
+        }
 
-	//eventos de teclado
-	document.addEventListener('keydown',function(e){
-		//arriba
-		if (e.keyCode == 87 || e.keyCode==38){
-			direction = 'up';
-		}
+        //izquierda
+        if (e.keyCode == 65 || e.keyCode == 37) {
+            direction = 'left';
+        }
 
-		//abajo
-		if (e.keyCode == 83 || e.keyCode==40){
-			direction = 'down';
-		}
-
-		//izquierda
-		if (e.keyCode == 65 || e.keyCode==37){
-			direction = 'left';
-		}
-
-		//derecha
-		if (e.keyCode == 68 || e.keyCode==39){
-			direction = 'right';
-		}
+        //derecha
+        if (e.keyCode == 68 || e.keyCode == 39) {
+            direction = 'right';
+        }
 
         //pause
-        if (e.keyCode == 32){
-            pause = (pause)?false:true;
+        if (e.keyCode == 32) {
+            pause = (pause) ? false : true;
         }
-	});
+    });
 
-	function Cuadrado(x,y,w,h,c){
-		this.x = x;
-		this.y = y;
-		this.w = w;
-		this.h = h;
-		this.c = c;
+    function Cuadrado(x, y, w, h, c, o) {
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+        this.c = c;
+        this.o = o;
 
-		this.dibujar = function(ctx){
-			ctx.fillStyle = this.c;
-			ctx.strokeRect(this.x,this.y,this.w,this.h);
-			ctx.fillRect(this.x,this.y,this.w,this.h);
-		}
+        this.dibujar = function (ctx) {
+            ctx.fillStyle = this.c;
+            ctx.strokeRect(this.x, this.y, this.w, this.h);
+            ctx.fillRect(this.x, this.y, this.w, this.h);
+        }
 
-        this.se_tocan = function (target) { 
-        if(this.x < target.x + target.w &&
-        this.x + this.w > target.x && 
-        this.y < target.y + target.h && 
-        this.y + this.h > target.y){
-            return true;  
-        }  
+        this.se_tocan = function (target) {
+            if (this.x < target.x + target.w &&
+                this.x + this.w > target.x &&
+                this.y < target.y + target.h &&
+                this.y + this.h > target.y) {
+                return true;
+            }
 
-    };
-	}
+        };
+    }
 
-	function paint(){
-		window.requestAnimationFrame(paint)
+    function paint() {
+        var aux;
+        window.requestAnimationFrame(paint)
 
-		ctx.fillStyle = "rgb(150,200,250)";
-		ctx.fillRect(0,0,500,500);	
+        ctx.fillStyle = "rgb(150,200,250)";
+        ctx.fillRect(0, 0, width, height);
 
         ctx.fillStyle = "black";
-        ctx.fillText("SCORE: "+score,50,50);
+        ctx.fillText("SCORE: " + score, 50, 50);
 
-		player1.dibujar(ctx);
+        player1.dibujar(ctx);
 
         player2.dibujar(ctx);
 
-        if (!pause){
+        obs_1.dibujar(ctx);
+        obs_2.dibujar(ctx);
+        obs_3.dibujar(ctx);
+        obs_4.dibujar(ctx);
+
+        if (!pause) {
             update();
-        }else{
+        } else {
             ctx.fillStyle = "rgba(0,0,0,0.5)"
-            ctx.fillRect(0,0,500,500);
+            ctx.fillRect(0, 0, width, height);
 
             ctx.fillStyle = "white";
-            ctx.fillText("P A U S E",230,230);
-           
+            ctx.fillText("P A U S E", 480, 370);
+
         }
 
-		
-	}
 
-    
+    }
 
-	function update(){
-        if (direction == 'right'){
+
+
+    function update() {
+        if (direction == 'right') {
             player1.x += speed;
-		    if (player1.x > 500){
-			    player1.x = 0;
-		    }
+            if (player1.x > width) {
+                player1.x = 0;
+            }
         }
 
-        if (direction == 'left'){
+        if (direction == 'left') {
             player1.x -= speed;
-		    if (player1.x < 0){
-			    player1.x = 500;
-		    }
+            if (player1.x < 0) {
+                player1.x = width;
+            }
         }
 
-        if (direction == 'up'){
+        if (direction == 'up') {
             player1.y -= speed;
-		    if (player1.y < 0){
-			    player1.y = 500;
-		    }
+            if (player1.y < 0) {
+                player1.y = height;
+            }
         }
 
-        if (direction == 'down'){
+        if (direction == 'down') {
             player1.y += speed;
-		    if (player1.y > 500){
-			    player1.y = 0;
-		    }
+            if (player1.y > height) {
+                player1.y = 0;
+            }
         }
-        
-        if (player1.se_tocan(player2)){
-            player2.x = getRandomInt(10,480);
-            player2.y = getRandomInt(10,480); 
+
+        if (player1.se_tocan(player2)) {
+            player2.x = getRandomInt(50, 950);
+            player2.y = getRandomInt(50, 750);
             score += 5;
-            speed += 2;
+            speed += 1;
         }
-	}
 
-	window.addEventListener('load',start);
+        for (i = 0; i < obstaculos.length; i++) {
+            if (player1.se_tocan(obstaculos[i])) {
+                speed = 0;
+            }
+        }
 
-	window.requestAnimationFrame = (function () {
-   		return window.requestAnimationFrame ||
-        		window.webkitRequestAnimationFrame ||
-        		window.mozRequestAnimationFrame ||
-        		function (callback) {
-            			window.setTimeout(callback, 17);
-        	};
-	}());
+    }
+
+    window.addEventListener('load', start);
+
+    window.requestAnimationFrame = (function () {
+        return window.requestAnimationFrame ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            function (callback) {
+                window.setTimeout(callback, 17);
+            };
+    }());
 
 
-   </script>
+</script>
 </body>
+
 </html>
