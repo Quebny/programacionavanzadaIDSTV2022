@@ -34,6 +34,10 @@
     var width = 1000;
     var height = 800;
 
+    var car = new Image();
+    var wall = new Image();
+    var target = new Image();
+
     var obs_1, obs_2, obs_3, obs_4;
     var obstaculos;
     
@@ -59,6 +63,10 @@
         obs_4 = new Cuadrado(270, 600, 500, 40, "black", true);
 
         obstaculos = [obs_1, obs_2, obs_3, obs_4];
+
+        car.src = 'car.png';
+        wall.src = 'wall.png';
+        target.src = 'target.png';
 
         paint();
     }
@@ -130,14 +138,20 @@
         ctx.fillStyle = "black";
         ctx.fillText("SCORE: " + score, 50, 50);
 
-        player1.dibujar(ctx);
+       
 
-        player2.dibujar(ctx);
+        //player1.dibujar(ctx);
+        ctx.drawImage(car,player1.x,player1.y,50,50);
+
+        //player2.dibujar(ctx);
+        ctx.drawImage(target,player2.x,player2.y,40,40);
+
 
         obs_1.dibujar(ctx);
         obs_2.dibujar(ctx);
         obs_3.dibujar(ctx);
         obs_4.dibujar(ctx);
+        //ctx.drawImage(wall,270, 100, 500, 40);
 
         if (!pause) {
             update();
@@ -193,7 +207,33 @@
 
         for (i = 0; i < obstaculos.length; i++) {
             if (player1.se_tocan(obstaculos[i])) {
-                speed = 0;
+                if (direction == 'right') {
+            player1.x -= speed;
+            if (player1.x > width) {
+                player1.x = 0;
+            }
+        }
+
+        if (direction == 'left') {
+            player1.x += speed;
+            if (player1.x < 0) {
+                player1.x = width;
+            }
+        }
+
+        if (direction == 'up') {
+            player1.y += speed;
+            if (player1.y < 0) {
+                player1.y = height;
+            }
+        }
+
+        if (direction == 'down') {
+            player1.y -= speed;
+            if (player1.y > height) {
+                player1.y = 0;
+            }
+        }
             }
         }
 
