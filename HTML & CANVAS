@@ -38,6 +38,8 @@
     var wall = new Image();
     var target = new Image();
 
+    var collect = new Audio();
+
     var obs_1, obs_2, obs_3, obs_4;
     var obstaculos;
     
@@ -67,6 +69,8 @@
         car.src = 'car.png';
         wall.src = 'wall.png';
         target.src = 'target.png';
+
+        collect.src = 'collect.wav'
 
         paint();
     }
@@ -203,6 +207,7 @@
             player2.y = getRandomInt(50, 750);
             score += 5;
             speed += 1;
+            collect.play();
         }
 
         for (i = 0; i < obstaculos.length; i++) {
