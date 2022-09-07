@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Data</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <style>
+        table,
+        th,
+        td {
+            border: 1px solid black;
+            border-radius: 5px;
+            background-color: rgb(46, 134, 235);
+
+        }
+
+        th,
+        td {
+            background-color: rgb(255, 255, 255);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="contenedor">
+        <h1 style="text-align:center">
+            Lista de Usuarios
+        </h1>
+
+        <button v-show="showList" @click="añadir">
+            Añadir
+        </button>
+        <button v-show="!showList" @click="añadir">
+            Regresar
+        </button>
+
+        <form v-show="!showList">
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Phone</th>
+                    <th>Website</th>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="text" placeholder="Name" v-model="name" required>
+                    </td>
+                    <td>
+                        <input type="text" placeholder="Username" v-model="username" required>
+                    </td>
+                    <td>
+                        <input type="text" placeholder="Email" v-model="email" required>
+                    </td>
+                    <td>
+                        <input type="text" placeholder="Address" v-model="address" required>
+                    </td>
+                    <td>
+                        <input type="text" placeholder="Phone" v-model="phone" required>
+                    </td>
+                    <td>
+                        <input type="text" placeholder="Website" v-model="website" required>
+                    </td>
+                </tr>
+            </table>
+            <button @click="guardar">Guardar</button>
+        </form>
+
+        <table v-show="showList">
+            <tr>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>Website</th>
+                <th>Actions</th>
+            </tr>
+            <tr v-for="user in users">
+                <td style="text-align:center">
+                    {{ user.id }}
+                </td>
+                <td>
+                    {{ user.name }}
+                </td>
+                <td>
+                    {{ user.username }}
+                </td>
+                <td>
+                    {{ user.email }}
+                </td>
+                <td>
+                    {{ user.phone }}
+                </td>
+                <td>
+                    {{ user.website }}
+                </td>
+                <td>
+                    <button @click="editar">Editar</button>
+                    <button @click="borrar">Borrar</button>
+                </td>
+            </tr>
+        </table>
+
+
+
+    </div>
+
+    <script src="https://unpkg.com/vue@3"></script>
+    <script type="text/javascript">
+
+        const { createApp } = Vue
+
+        const app = createApp({
+            data() {
+                return {
+                    user: '',
+                    users: null,
+                    showList: true
+                }
+            },
+            methods: {
+                añadir() {
+                    var show = this.showList
+
+                    show ? this.showList = false :  this.showList = true
+
+                },
+                editar() {
+
+                },
+                borrar() {
+
+                },
+                guardar(e) {
+                    console.log(":)")
+                    this.users.push({
+                        id: this.users.length + 1,
+                        name: this.name,
+                        username: this.username,
+                        email: this.email,
+                        address: this.address,
+                        phone: this.phone,
+                        website: this.website
+                    })
+
+                    e.preventDefault()
+                }
+
+            },
+            mounted() {
+                var usr = localStorage.getItem('user');
+                usr = JSON.parse(usr);
+                this.user = usr.name;
+
+                fetch('data/users.json')
+                    .then((res) => res.json())
+                    .then((json) => (this.users = json))
+                    .catch((err) => (alert('no data')))
+            }
+        }).mount('#contenedor')
+    </script>
+</body>
+
+</html>

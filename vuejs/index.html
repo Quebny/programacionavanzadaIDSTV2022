@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Index</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+</head>
+
+<body>
+    <div id="contenedor">
+        <form>
+            <fieldset>
+                <legend>
+                    Datos de acceso
+                </legend>
+                <label>
+                    Correo electrónico
+                </label>
+                <input type ="email" v-model="email" name ="email" required>
+                <br>
+                <label>
+                    Password
+                </label>
+                <input type="password" v-model="password" name = "password" required>
+
+                <br>
+                <button @click = "login">Login</button>
+            </fieldset>
+            
+        </form>
+    </div>
+
+    <script src="https://unpkg.com/vue@3"></script>
+    <script type="text/javascript">
+
+        const { createApp } = Vue
+
+
+        const app = createApp({
+            data() {
+                return {
+                    users: null,
+                    email:'',
+                    password:''
+                }
+            },
+            methods: {
+                login(e){
+
+                    var aux_email = this.email
+                    var aux_pwd = this.password
+
+                    var access = this.users.map(function(u){
+                        if(aux_email === u.email){
+                            if(aux_pwd === u.password){
+                                var aux_user ={
+                                    name: u.name,
+                                    username: u.username,
+                                    email: u.email,
+                                    address: u.address,
+                                    phone: u.phone,
+                                    website: u.website,
+                                    company: u.company
+                                }
+
+                                localStorage.setItem('user', JSON.stringify(aux_user))
+
+                                alert("Sesión Iniciada correctamente")
+                                window.location.href ="users.html"
+                            }
+                        }
+                    })
+
+                    alert("Datos Incorrectos")
+
+                    console.log(this.email)
+                    console.log(this.password)
+
+                    e.preventDefault()
+                }
+            },
+            mounted() {
+                fetch('data/users.json')
+                    .then((res) => res.json())
+                    .then((json) => (this.users = json))
+                    .catch((err) => (alert('no data')))
+            }
+        }).mount('#contenedor')
+    </script>
+</body>
+
+</html>
