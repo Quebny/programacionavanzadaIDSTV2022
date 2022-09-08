@@ -42,7 +42,6 @@
                     <th>Name</th>
                     <th>Username</th>
                     <th>Email</th>
-                    <th>Address</th>
                     <th>Phone</th>
                     <th>Website</th>
                 </tr>
@@ -57,9 +56,6 @@
                         <input type="text" placeholder="Email" v-model="email" required>
                     </td>
                     <td>
-                        <input type="text" placeholder="Address" v-model="address" required>
-                    </td>
-                    <td>
                         <input type="text" placeholder="Phone" v-model="phone" required>
                     </td>
                     <td>
@@ -72,10 +68,10 @@
 
         <table v-show="showList">
             <tr>
+                <th>ID</th>
                 <th>Name</th>
                 <th>Username</th>
                 <th>Email</th>
-                <th>Address</th>
                 <th>Phone</th>
                 <th>Website</th>
                 <th>Actions</th>
@@ -100,13 +96,11 @@
                     {{ user.website }}
                 </td>
                 <td>
-                    <button @click="editar">Editar</button>
-                    <button @click="borrar">Borrar</button>
+                    <button @click="editar(user)">Editar</button>
+                    <button @click="borrar(user.id)">Borrar</button>
                 </td>
             </tr>
         </table>
-
-
 
     </div>
 
@@ -120,33 +114,69 @@
                 return {
                     user: '',
                     users: null,
-                    showList: true
+                    showList: true,
+                    state: '',
+                    currUser: null
                 }
             },
             methods: {
                 añadir() {
+                    this.state = 'add'
                     var show = this.showList
 
-                    show ? this.showList = false :  this.showList = true
+                    show ? this.showList = false : this.showList = true
 
                 },
-                editar() {
+                editar(u) {
+                    this.state = 'edit'
+                    var show = this.showList
+
+                    this.name = u.name
+                    this.username = u.username
+                    this.email = u.email
+                    this.phone = u.phone
+                    this.website = u.website
+
+                    this.currUser = u
+
+                    console.log(this.currUser)
+                    
+                    show ? this.showList = false : this.showList = true
 
                 },
-                borrar() {
+                borrar(r) {
+
+                    for (i = 0; i < this.users.length; i++) {
+                        if (r == this.users[i].id) {
+                            this.users.splice(i, 1);
+                        }
+                    }
 
                 },
                 guardar(e) {
-                    console.log(":)")
-                    this.users.push({
-                        id: this.users.length + 1,
-                        name: this.name,
-                        username: this.username,
-                        email: this.email,
-                        address: this.address,
-                        phone: this.phone,
-                        website: this.website
-                    })
+                    if (this.state == 'add') {
+                        console.log("agregado")
+                        this.users.push({
+                            id: this.users.length + 1,
+                            name: this.name,
+                            username: this.username,
+                            email: this.email,
+                            phone: this.phone,
+                            website: this.website
+                        })
+                        alert("Guardado con éxito")
+                    }
+                    if (this.state == 'edit'){
+                        console.log("editado")
+                        this.currUser.name = this.name
+                        this.currUser.username = this.username
+                        this.currUser.email = this.email
+                        this.currUser.phone = this.phone
+                        this.currUser.website = this.website
+
+                        alert("Editado con éxito")
+                    }
+
 
                     e.preventDefault()
                 }
