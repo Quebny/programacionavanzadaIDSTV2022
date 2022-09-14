@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Index</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@2.27.0/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <div id="contenedor">
+
+        <div class="hero min-h-screen bg-base-200">
+            <div class="hero-content flex-col lg:flex-row-reverse">
+                <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+                    <div class="card-body">
+                        <div class="text-center lg:text-left">
+                            <h1 class="text-5xl font-bold">Iniciar Sesión</h1>
+                        </div>
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Email</span>
+                            </label>
+                            <input type="email" v-model="email" name="email" placeholder="email" class="input input-bordered" required/>
+                        </div>
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Password</span>
+                            </label>
+                            <input type="password" v-model="password" name="password" placeholder="password" class="input input-bordered" required/>
+                        </div>
+                        <div class="form-control mt-6">
+                            <button @click="login" class="btn btn-primary">Login</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- <form>
+            <fieldset>
+                <legend>
+                    Datos de acceso
+                </legend>
+                <label>
+                    Correo electrónico
+                </label>
+                <input type="email" v-model="email" name="email" required>
+                <br>
+                <label>
+                    Password
+                </label>
+                <input type="password" v-model="password" name="password" required>
+
+                <br>
+                <button @click="login">Login</button>
+            </fieldset>
+
+        </form> -->
+    </div>
+
+    <script src="https://unpkg.com/vue@3"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script type="text/javascript">
+
+        const { createApp } = Vue
+
+
+        const app = createApp({
+            data() {
+                return {
+                    users: null,
+                    email: '',
+                    password: ''
+                }
+            },
+            methods: {
+                login(e) {
+
+
+                    var data = new FormData();
+                    data.append('username', this.email); //quebyn
+                    data.append('password', this.password); //VerySecurePasswordThatIOnlyUseOnceTrustMe
+                    data.append('request_token', '');
+
+                    var config = {
+                        method: 'post',
+                        url: 'https://api.themoviedb.org/3/authentication/token/validate_with_login',
+                        headers: {
+                            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkZWRjOWQ0OTY0ZmVhMDA4YmVkNGVkMjc0ZDZkN2JjOSIsInN1YiI6IjYzMjAxYTY3Y2MyNzdjMDA4YTYxMTU3ZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7SvRwk9oBs-BTvnhJe74ufeZZ43f3QhGqHGvVDWlxXc',
+                            // ...data.getHeaders()
+                        },
+                        data: data
+                    };
+
+                    axios(config)
+                        .then(function (response) {
+                            if (response.data.success) {
+                                window.location.href = "users.html"
+                            }
+                            console.log(JSON.stringify(response.data));
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                            alert('Datos Incorrectos')
+                        });
+
+                    e.preventDefault()
+                }
+            },
+            mounted() {
+
+            }
+        }).mount('#contenedor')
+    </script>
+</body>
+
+</html>

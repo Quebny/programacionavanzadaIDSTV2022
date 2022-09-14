@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html data-theme="forest">
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Peliculas.com</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@2.27.0/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <div id="contenedor">
+
+        <div class="navbar bg-neutral text-neutral-content">
+            <a class="btn btn-ghost normal-case text-xl">Peliculas.com</a>
+        </div>
+
+
+
+        <div v-for="genre in genres" class="flex flex-wrap justify-center">
+            <div v-for="desc in details" class="card w-96 bg-base-100 shadow-xl">
+                <figure class="px-5 pt-5">
+                    <img :src="`https://image.tmdb.org/t/p/w500/${desc.poster_path}`" alt="Shoes" class="rounded-xl" />
+                </figure>
+                <div class="card-body items-center text-justify ">
+                    <h2 class="card-title">{{desc.title}}</h2>
+                    <div class="card-actions">
+                        <label @click="detalles(desc); getRatings()" for="my-modal-4"
+                            class="btn modal-button btn-primary">Detalles</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <input type="checkbox" id="my-modal-4" class="modal-toggle" />
+        <label for="my-modal-4" class="modal cursor-pointer">
+            <div class="hero bg-primary w-3/4 rounded-lg justify-start">
+                <div class="hero-content flex-col lg:flex-row">
+                    <img :src="`https://image.tmdb.org/t/p/original/${currMovie.backdrop_path}`"
+                        class="mask mask-parallelogram w-3/5 shadow-2xl " />
+                    <div class="text-neutral">
+                        <h1 class="text-5xl font-bold">{{currMovie.title}}</h1>
+                        <p class="py-4">Fecha de estreno: {{currMovie.release_date}}</p>
+                        <p>{{currMovie.overview}}</p>
+                        <br>
+                        <div class="rating rating-lg rating-half">
+                            <input type="radio" name="rating-10" class="rating-hidden" checked />
+                            <input @click="rate(0.5, currMovie)" type="radio" name="rating-10" class="bg-green-200 mask mask-star-2 mask-half-1" />
+                            <input @click="rate(1, currMovie)" type="radio" name="rating-10" class="bg-green-200 mask mask-star-2 mask-half-2" />
+                            <input @click="rate(1.5, currMovie)" type="radio" name="rating-10" class="bg-green-200 mask mask-star-2 mask-half-1" />
+                            <input @click="rate(2, currMovie)" type="radio" name="rating-10" class="bg-green-200 mask mask-star-2 mask-half-2" />
+                            <input @click="rate(2.5, currMovie)" type="radio" name="rating-10" class="bg-green-200 mask mask-star-2 mask-half-1" />
+                            <input @click="rate(3, currMovie)" type="radio" name="rating-10" class="bg-green-200 mask mask-star-2 mask-half-2" />
+                            <input @click="rate(3.5, currMovie)" type="radio" name="rating-10" class="bg-green-200 mask mask-star-2 mask-half-1" />
+                            <input @click="rate(4, currMovie)" type="radio" name="rating-10" class="bg-green-200 mask mask-star-2 mask-half-2" />
+                            <input @click="rate(4.5, currMovie)" type="radio" name="rating-10" class="bg-green-200 mask mask-star-2 mask-half-1" />
+                            <input @click="rate(5, currMovie)" type="radio" name="rating-10" class="bg-green-200 mask mask-star-2 mask-half-2" />
+                            <button @click="unrate(currMovie)" class="btn btn-square btn-outline ml-5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                        <p class="mt-3 ml-3">Tu reseña: {{ currRate }}</p>
+                    </div>
+                </div>
+            </div>
+        </label>
+    </div>
+
+    <script src="https://unpkg.com/vue@3"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript">
+
+        const { createApp } = Vue
+
+        const app = createApp({
+            data() {
+                return {
+                    details: null,
+                    genres: null,
+                    currGenres: null,
+                    currMovie: [],
+                    value: null,
+                    currRate: null
+                }
+            },
+            methods: {
+                // Generos(g) {
+                //     // console.log(g)
+                //     // console.log(this.genres.genres)
+                //     for (i = 0; i < g.length; i++) {
+                //         console.log("Movie Genre: " + g[i])
+                //         for (j = 0; j < this.genres.genres.length; j++) {
+                //             console.log("Genre List: " + this.genres.genres[j].id)
+                //             if (g[i] == this.genres.genres[j].id) {
+                //                 console.log("Match")
+                //                 this.currGenres.push({
+                //                     name: this.genres.genres[j].name
+                //                 })
+                //             }
+                //         }
+                //     }
+
+                //},
+                detalles(mv) {
+                    this.currMovie = mv
+                },
+                count(stars) {
+                    this.value = stars
+                    console.log(stars)
+                },
+
+                rate(stars, mv) {
+                    var data = JSON.stringify({
+                        "value": stars
+                    });
+
+                    var config = {
+                        method: 'post',
+                        url: 'https://api.themoviedb.org/3/movie/' + mv.id + '/rating',
+                        headers: {
+                            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkZWRjOWQ0OTY0ZmVhMDA4YmVkNGVkMjc0ZDZkN2JjOSIsInN1YiI6IjYzMjAxYTY3Y2MyNzdjMDA4YTYxMTU3ZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7SvRwk9oBs-BTvnhJe74ufeZZ43f3QhGqHGvVDWlxXc',
+                            'Content-Type': 'application/json'
+                        },
+                        data: data
+                    };
+
+                    axios(config)
+                        .then(function (response) {
+                            console.log(JSON.stringify(response.data));
+                            alert("Reseña enviada con éxito")
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                },
+
+                unrate(mv) {
+                    var config = {
+                        method: 'delete',
+                        url: 'https://api.themoviedb.org/3/movie/' + mv.id + '/rating?',
+                        headers: {
+                            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkZWRjOWQ0OTY0ZmVhMDA4YmVkNGVkMjc0ZDZkN2JjOSIsInN1YiI6IjYzMjAxYTY3Y2MyNzdjMDA4YTYxMTU3ZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7SvRwk9oBs-BTvnhJe74ufeZZ43f3QhGqHGvVDWlxXc'
+                        }
+                    };
+
+                    axios(config)
+                        .then(function (response) {
+                            console.log(JSON.stringify(response.data));
+                            alert("Reseña eliminada con éxito")
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                },
+
+                getRatings() {
+                    let vue = this;
+                    let flag = false;
+                    var config = {
+                        method: 'get',
+                        url: 'https://api.themoviedb.org/3/account/{account_id}/rated/movies?&language=es-MX&sort_by=created_at.asc&page=1',
+                        headers: {
+                            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkZWRjOWQ0OTY0ZmVhMDA4YmVkNGVkMjc0ZDZkN2JjOSIsInN1YiI6IjYzMjAxYTY3Y2MyNzdjMDA4YTYxMTU3ZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7SvRwk9oBs-BTvnhJe74ufeZZ43f3QhGqHGvVDWlxXc'
+                        }
+                    };
+
+                    axios(config)
+                        .then(function (response) {
+                            for (i = 0; i < response.data.results.length; i++) {
+                                if (response.data.results[i].id == vue.currMovie.id) {
+                                    vue.currRate = response.data.results[i].rating
+                                    flag = true
+                                }else if(!flag){
+                                    vue.currRate = 0
+                                }
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                },
+
+                init() {
+                    let vue = this;
+                    var data = new FormData();
+                    var config = {
+                        method: 'get',
+                        url: 'https://api.themoviedb.org/3/movie/popular?&language=es-MX&page=1',
+                        headers: {
+                            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkZWRjOWQ0OTY0ZmVhMDA4YmVkNGVkMjc0ZDZkN2JjOSIsInN1YiI6IjYzMjAxYTY3Y2MyNzdjMDA4YTYxMTU3ZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7SvRwk9oBs-BTvnhJe74ufeZZ43f3QhGqHGvVDWlxXc',
+                            // ...data.getHeaders()
+                        },
+                        data: data
+                    };
+
+                    axios(config)
+                        .then(function (response) {
+                            vue.details = response.data.results
+                            console.log(vue.details)
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                },
+                id_genres() {
+                    let vue = this;
+
+                    var config = {
+                        method: 'get',
+                        url: 'https://api.themoviedb.org/3/genre/movie/list?&language=es-MX',
+                        headers: {
+                            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkZWRjOWQ0OTY0ZmVhMDA4YmVkNGVkMjc0ZDZkN2JjOSIsInN1YiI6IjYzMjAxYTY3Y2MyNzdjMDA4YTYxMTU3ZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7SvRwk9oBs-BTvnhJe74ufeZZ43f3QhGqHGvVDWlxXc'
+                        }
+                    };
+
+                    axios(config)
+                        .then(function (response) {
+                            vue.genres = response.data
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+
+                }
+            },
+            mounted() {
+                this.init()
+                this.id_genres()
+            }
+        }).mount('#contenedor')
+    </script>
+</body>
+
+</html>
