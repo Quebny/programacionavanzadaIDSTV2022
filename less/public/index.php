@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel</title>
+    <title>Login</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css">
     <!-- <link rel="stylesheet" type="text/css" href="css/main.less"> -->
     <style type="text/css">
@@ -16,7 +16,7 @@
 </head>
 
 <body>
-    <div class="container recolor">
+    <div class="container recolor mt-10">
         <section>
             <div class="row align-self-center justify-content-md-center">
                 <div class="col-md-4 col-sm-12">
@@ -46,7 +46,7 @@
                             </div>
 
                             <div class="d-grid gap-2 col-4   mx-auto">
-                                <button class="btn btn-primary" type="button">Login</button>
+                                <a class="btn btn-primary" href="product/index.php" type="button">Login</a>
                             </div>
                         </form>
                     </fieldset>
