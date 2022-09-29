@@ -1,0 +1,9 @@
+.container {
+    width: 80%;
+    margin: auto;
+    box-shadow: rgba(0,0,0,0.24) 0px 3px 8px;
+}
+.container fieldset form button {
+    background-color: cyan;
+    color: #77a2d4;
+}
