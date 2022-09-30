@@ -21,7 +21,7 @@
             <div class="row align-self-center justify-content-md-center">
                 <div class="col-md-4 col-sm-12">
                     <fieldset>
-                        <form>
+                        <form method="post" action="app/AuthController.php">
                             <h1 class="text-center">
                                 Login
                             </h1>
@@ -32,7 +32,7 @@
 
                             <div class="input-group mb-3">
                                 <span class="input-group-text" id="basic-addon1">@</span>
-                                <input type="text" class="form-control" placeholder="example@gmail.com" aria-label="Username" aria-describedby="basic-addon1">
+                                <input name="email" type="text" class="form-control" placeholder="example@gmail.com" aria-label="Username" aria-describedby="basic-addon1" required>
                             </div>
 
 
@@ -42,11 +42,13 @@
 
                             <div class="input-group mb-3">
                                 <span class="input-group-text" id="basic-addon2">#</span>
-                                <input type="text" class="form-control" placeholder="Password" aria-label="Username" aria-describedby="basic-addon2">
+                                <input name="password" type="text" class="form-control" placeholder="Password" aria-label="Username" aria-describedby="basic-addon2" required>
                             </div>
 
                             <div class="d-grid gap-2 col-4   mx-auto">
-                                <a class="btn btn-primary" href="products/index.php" type="button">Login</a>
+                                <input type="hidden" name="action" value="access">
+                                <button class="btn btn-primary" type="submit">Login</button>
+                                <!-- <a class="btn btn-primary" href="products/index.php" type="submit">Login</a> -->
                             </div>
                         </form>
                     </fieldset>

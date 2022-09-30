@@ -1,3 +1,9 @@
+<?php
+include "../app/ProductsController.php";
+$productsController = new ProductsController();
+$product = $productsController->getProducts();
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -38,35 +44,37 @@
 
                     <div class="row">
 
-                        <?php for ($i = 0; $i < 9; $i++) : ?>
+                        <?php if (isset($product) && count($product)) : ?>
+                            <?php foreach ($product as $product) : ?>
 
-                            <div class="col-md-4 col-sm-12">
+                                <div class="col-md-4 col-sm-12">
 
-                                <div class="card mb-2">
-                                    <img src="../public/img/logo.png" class="card-img-top" alt="...">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Producto</h5>
-                                        <h6 class="card-subtitle mb-2 text-muted">Precio (?)</h6>
-                                        <p class="card-text">Descripción / Detalles</p>
+                                    <div class="card mb-2">
+                                        <img src="<?= $product->cover ?>" class="card-img-top img-thumbnail" alt="...">
+                                        <div class="card-body">
+                                            <h5 class="card-title"><?= $product->name?> </h5>
+                                            <h6 class="card-subtitle mb-2 text-muted"><?= $product->brand->name?></h6>
+                                            <p class="card-text"><?= $product->description?></p>
 
-                                        <div class="row">
-                                            <a data-bs-toggle="modal" data-bs-target="#addProductModal" href="#" class="btn btn-warning mb-1 col-6">
-                                                Editar
-                                            </a>
-                                            <a onclick="eliminar(this)" href="#" class="btn btn-danger mb-1 col-6">
-                                                Eliminar
-                                            </a>
-                                            <a href="detalles.php" class="btn btn-info col-12">
-                                                Detalles
-                                            </a>
+                                            <div class="row">
+                                                <a data-bs-toggle="modal" data-bs-target="#addProductModal" href="#" class="btn btn-warning mb-1 col-6">
+                                                    Editar
+                                                </a>
+                                                <a onclick="eliminar(this)" href="#" class="btn btn-danger mb-1 col-6">
+                                                    Eliminar
+                                                </a>
+                                                <a href="detalles.php" class="btn btn-info col-12">
+                                                    Detalles
+                                                </a>
+                                            </div>
+
                                         </div>
-
                                     </div>
+
                                 </div>
 
-                            </div>
-
-                        <?php endfor; ?>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
 
                     </div>
 
