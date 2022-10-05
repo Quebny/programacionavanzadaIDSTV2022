@@ -3,6 +3,7 @@ include "../app/ProductsController.php";
 $productsController = new ProductsController();
 $product = $productsController->getProducts();
 
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -52,22 +53,25 @@ $product = $productsController->getProducts();
                                     <div class="card mb-2">
                                         <img src="<?= $product->cover ?>" class="card-img-top img-thumbnail" alt="...">
                                         <div class="card-body">
-                                            <h5 class="card-title"><?= $product->name?> </h5>
-                                            <h6 class="card-subtitle mb-2 text-muted"><?= $product->brand->name?></h6>
-                                            <p class="card-text"><?= $product->description?></p>
+                                            <h5 class="card-title"><?= $product->name ?> </h5>
+                                            <h6 class="card-subtitle mb-2 text-muted"><?= $product->brand->name ?></h6>
+                                            <p class="card-text"><?= $product->description ?></p>
 
-                                            <div class="row">
-                                                <a data-bs-toggle="modal" data-bs-target="#addProductModal" href="#" class="btn btn-warning mb-1 col-6">
-                                                    Editar
-                                                </a>
-                                                <a onclick="eliminar(this)" href="#" class="btn btn-danger mb-1 col-6">
-                                                    Eliminar
-                                                </a>
-                                                <a href="detalles.php" class="btn btn-info col-12">
-                                                    Detalles
-                                                </a>
-                                            </div>
+                                            <form method="get" action="../app/ProductsController.php">
+                                                <div class="row">
+                                                    <a data-bs-toggle="modal" data-bs-target="#addProductModal" href="#" class="btn btn-warning mb-1 col-6">
+                                                        Editar
+                                                    </a>
+                                                    <a onclick="eliminar(this)" href="#" class="btn btn-danger mb-1 col-6">
+                                                        Eliminar
+                                                    </a>
 
+                                                    <input type="hidden" name="id" value="<?= $product->id ?>" action="">
+                                                    <button class="btn btn-info col-12">
+                                                        Detalles
+                                                    </a>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
 
@@ -91,29 +95,53 @@ $product = $productsController->getProducts();
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Acción</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Añadir Producto</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <form>
+                <form method="post" action="../app/ProductsController.php">
 
                     <div class="modal-body">
 
-                        <?php for ($i = 0; $i < 4; $i++) : ?>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="basic-addon1">!</span>
-                                <input required type="text" class="form-control" placeholder="Input" aria-label="Username" aria-describedby="basic-addon1">
-                            </div>
-                        <?php endfor; ?>
+                        <p>Nombre</p>
+                        <div class="input-group mb-3">
+                            <input name="name" required type="text" class="form-control" placeholder="Nombre">
+                        </div>
 
+                        <p>Slug</p>
+                        <div class="input-group mb-3">
+                            <input name="slug" required type="text" class="form-control" placeholder="Slug">
+                        </div>
+
+                        <p>Descripción</p>
+                        <div class="input-group mb-3">
+                            <textarea name="desc" required type="text" class="form-control" placeholder="Descripción" style="height: 100px"></textarea>
+                        </div>
+
+                        <p>Características</p>
+                        <div class="input-group mb-3">
+                            <input name="chara" required type="text" class="form-control" placeholder="Características">
+                        </div>
+
+                        <p>Marca</p>
+                        <div class="input-group mb-3">
+                            <input name="marca" required type="text" class="form-control" placeholder="Marca">
+                        </div>
+
+                        <p>Imagen</p>
+                        <div class="input-group mb-3">
+                            <input name="img" required type="file" class="form-control">
+                        </div>
                     </div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             Cerrar
                         </button>
+
+                        <input type="hidden" name="action" value="upload">
                         <button type="submit" class="btn btn-primary">
-                            Guardar cambios
+                            Agregar
                         </button>
                     </div>
 
