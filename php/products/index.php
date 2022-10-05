@@ -1,8 +1,11 @@
 <?php
 include "../app/ProductsController.php";
+include "../app/BrandsController.php";
 $productsController = new ProductsController();
-$product = $productsController->getProducts();
+$brandController = new BrandsController();
 
+$product = $productsController->getProducts();
+$brand = $brandController->getBrands();
 
 ?>
 <!DOCTYPE html>
@@ -126,9 +129,12 @@ $product = $productsController->getProducts();
 
                         <p>Marca</p>
                         <div class="input-group mb-3">
-                            <!-- <option value="">
-                            </option>  -->
-                            <input name="marca" required type="text" class="form-control" placeholder="Marca">
+                            <select>
+                                <?php foreach ($brand as $brand) : ?>
+                                    <option value='<?= $brand->name ?>'><?= $brand->name ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <!-- <input name="marca" required type="text" class="form-control" placeholder="Marca"> -->
                         </div>
 
                         <p>Imagen</p>
@@ -143,7 +149,7 @@ $product = $productsController->getProducts();
                         </button>
 
                         <input type="hidden" name="action" value="upload">
-                        <input type ="hidden" name="action" value="update">
+                        <input type="hidden" name="action" value="update">
                         <button type="submit" class="btn btn-primary">
                             Agregar
                         </button>
@@ -176,7 +182,7 @@ $product = $productsController->getProducts();
                         bodyFormData.append('id', id);
                         bodyFormData.append('action', 'delete');
 
-                        axios.post('../app/ProductsController.php',bodyFormData)
+                        axios.post('../app/ProductsController.php', bodyFormData)
                             .then(function(response) {
                                 console.log(response);
                             })
