@@ -59,17 +59,17 @@ $product = $productsController->getProducts();
 
                                             <form method="get" action="../app/ProductsController.php">
                                                 <div class="row">
-                                                    <a data-bs-toggle="modal" data-bs-target="#addProductModal" href="#" class="btn btn-warning mb-1 col-6">
+                                                    <a data-product='<?= json_encode($product) ?>' onclick="editProduct($product)" data-bs-toggle="modal" data-bs-target="#addProductModal" href="#" class="btn btn-warning mb-1 col-6">
                                                         Editar
                                                     </a>
-                                                    <a onclick="eliminar(this)" href="#" class="btn btn-danger mb-1 col-6">
+                                                    <a onclick='eliminar(<?= $product->id ?>)' href="#" class="btn btn-danger mb-1 col-6">
                                                         Eliminar
                                                     </a>
 
                                                     <input type="hidden" name="id" value="<?= $product->id ?>" action="">
                                                     <button class="btn btn-info col-12">
                                                         Detalles
-                                                    </a>
+                                                        </a>
                                                 </div>
                                             </form>
                                         </div>
@@ -90,6 +90,7 @@ $product = $productsController->getProducts();
 
     </div>
 
+
     <!-- Modal -->
     <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -105,7 +106,7 @@ $product = $productsController->getProducts();
 
                         <p>Nombre</p>
                         <div class="input-group mb-3">
-                            <input name="name" required type="text" class="form-control" placeholder="Nombre">
+                            <input id="name" name="name" required type="text" class="form-control" placeholder="Nombre">
                         </div>
 
                         <p>Slug</p>
@@ -125,6 +126,8 @@ $product = $productsController->getProducts();
 
                         <p>Marca</p>
                         <div class="input-group mb-3">
+                            <!-- <option value="">
+                            </option>  -->
                             <input name="marca" required type="text" class="form-control" placeholder="Marca">
                         </div>
 
@@ -140,6 +143,7 @@ $product = $productsController->getProducts();
                         </button>
 
                         <input type="hidden" name="action" value="upload">
+                        <input type ="hidden" name="action" value="update">
                         <button type="submit" class="btn btn-primary">
                             Agregar
                         </button>
@@ -154,7 +158,50 @@ $product = $productsController->getProducts();
 
 
     <!-- Scripts -->
-    <?php include '../layout/scripts.template.php'; ?>
+    <?php include '../layout/scripts.template.php' ?>
+    <script type="text/javascript">
+        function eliminar(id) {
+            swal({
+                    title: "Are you sure?",
+                    text: "Once deleted, you will not be able to recover this imaginary file!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+
+                        var bodyFormData = new FormData();
+
+                        bodyFormData.append('id', id);
+                        bodyFormData.append('action', 'delete');
+
+                        axios.post('../app/ProductsController.php',bodyFormData)
+                            .then(function(response) {
+                                console.log(response);
+                            })
+                            .catch(function(error) {
+                                console.log(error);
+                            });
+                        swal("Poof! Your imaginary file has been deleted!", {
+                            icon: "success",
+                        });
+                    } else {
+                        swal("Your imaginary file is safe!");
+                    }
+                });
+        }
+
+        function editProduct(target) {
+            console.log(target)
+            console.log(target.dataset.product.name)
+            let product = JSON.parse(target.dataset.product);
+
+            docuemnt.getElementById('name').value = product.name
+
+            // document.getElementById('action').value = 'update / upload'
+        }
+    </script>
 </body>
 
 </html>
