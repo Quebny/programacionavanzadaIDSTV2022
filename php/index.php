@@ -26,7 +26,7 @@
             <div class="row align-self-center justify-content-md-center">
                 <div class="col-md-4 col-sm-12">
                     <fieldset>
-                        <form method="post" action="app/AuthController.php">
+                        <form method="post" action="<?= BASE_PATH?>auth">
                             <h1 class="text-center">
                                 Login
                             </h1>

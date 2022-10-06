@@ -152,6 +152,7 @@ $brand = $brandController->getBrands();
                         <button type="submit" class="btn btn-primary">
                             Agregar
                         </button>
+                        <!-- <input type = "hidden" name="super_token" value=<?= $_SESSION['super_token']?>> ***descomentar*** -->
                     </div>
 
                 </form>
@@ -178,8 +179,11 @@ $brand = $brandController->getBrands();
 
                         var bodyFormData = new FormData();
 
+                        
+
                         bodyFormData.append('id', id);
                         bodyFormData.append('action', 'delete');
+                        bodyFormData.append('action', 'delete'); //super token
 
                         axios.post('../app/ProductsController.php', bodyFormData)
                             .then(function(response) {

@@ -38,7 +38,7 @@ class AuthController
         $response = curl_exec($curl);
 
         curl_close($curl);
-        echo $response;
+        // echo $response;
 
         $response = json_decode($response);
 
@@ -51,9 +51,10 @@ class AuthController
             $_SESSION['avatar'] = $response->data->avatar;
             $_SESSION['role'] = $response->data->role;
             $_SESSION['token'] = $response->data->token;
-            header("Location:../products/index.php");
+
+            header("Location:".BASE_PATH."/products?success");
         } else {
-            header("Location:../products/error.php");
+            header("Location:".BASE_PATH."/?error");
         }
     }
 }

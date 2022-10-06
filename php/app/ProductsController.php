@@ -95,7 +95,6 @@ class ProductsController
         $response = curl_exec($curl);
 
         curl_close($curl);
-        echo $response;
 
         var_dump($response);
 
@@ -133,7 +132,7 @@ class ProductsController
         // echo $response;
 
         $response = json_decode($response);
-        echo $response->data->slug;
+        // echo $response->data->slug;
         if (isset($response->code) && $response->code > 0) {
             header("Location:../products/detalles.php?" . $response->data->slug);
         } else {
@@ -162,7 +161,7 @@ class ProductsController
         $response = curl_exec($curl);
 
         curl_close($curl);
-        echo $response;
+        // echo $response;
 
         var_dump($response);
 
