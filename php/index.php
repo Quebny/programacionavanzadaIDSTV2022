@@ -1,3 +1,8 @@
+<?php
+    include "app/config.php"
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,7 +15,7 @@
     <!-- <link rel="stylesheet" type="text/css" href="css/main.less"> -->
     <style type="text/css">
         .recolor {
-            background-color:steelblue
+            background-color: steelblue
         }
     </style>
 </head>
@@ -49,6 +54,8 @@
                                 <input type="hidden" name="action" value="access">
                                 <button class="btn btn-primary" type="submit">Login</button>
                                 <!-- <a class="btn btn-primary" href="products/index.php" type="submit">Login</a> -->
+
+                                <input type = "hidden" name="super_token" value=<?= $_SESSION['super_token']?>>
                             </div>
                         </form>
                     </fieldset>

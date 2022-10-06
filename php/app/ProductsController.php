@@ -1,6 +1,5 @@
 <?php
-
-session_start();
+    include_once "config.php";
 
 if (isset($_POST["action"])) {
     switch ($_POST["action"]) {
@@ -14,15 +13,15 @@ if (isset($_POST["action"])) {
             $img = strip_tags($_POST['img']);
 
             $productsController = new ProductsController();
-            $productsController->createProduct($name, $slug, $desc, $chara, $marca, $img);
+            $productsController -> createProduct($name, $slug, $desc, $chara, $marca, $img);
             break;
 
         case 'delete':
             $id = strip_tags($_POST['id']);
 
             $productsController = new ProductsController();
-            $productsController->remove($id);
-            echo ("aaa");
+            $productsController -> remove($id);
+
             echo json_encode($productsController->remove($id));
 
             break;
@@ -30,7 +29,7 @@ if (isset($_POST["action"])) {
 }
 if (isset($_GET["id"])) {
     $productsController = new ProductsController();
-    $productsController->getDetails($_GET["id"]);
+    $productsController -> getDetails($_GET["id"]);
 }
 
 var_dump($_POST);
@@ -86,7 +85,7 @@ class ProductsController
                 'description' => $desc,
                 'features' => $chara,
                 'brand_id' => $marca,
-                'cover' => new CURLFILE($_FILES['cover']['tmp_name'])
+                // 'cover' => new CURLFILE($_FILES['cover']['tmp_name'])
             ),
             CURLOPT_HTTPHEADER => array(
                 'Authorization: Bearer ' . $_SESSION['token']
@@ -98,14 +97,16 @@ class ProductsController
         curl_close($curl);
         echo $response;
 
+        var_dump($response);
+
 
         $response = json_decode($response);
 
-        if (isset($response->code) && $response->code > 0) {
-            header("Location:../products/index.php");
-        } else {
-            header("Location:../products/error.php");
-        }
+        // if (isset($response->code) && $response->code > 0) {
+        //     header("Location:../products/index.php");
+        // } else {
+        //     header("Location:../products/error.php");
+        // }
     }
 
     public function getDetails($id)
@@ -168,7 +169,6 @@ class ProductsController
         $response = json_decode($response);
 
         if (isset($response->code) && $response->code > 0) {
-
             return true;
         } else {
             return false;

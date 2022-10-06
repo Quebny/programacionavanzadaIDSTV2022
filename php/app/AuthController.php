@@ -1,14 +1,18 @@
 <?php
+include_once "config.php";
+
 if (isset($_POST["action"])) {
-    switch ($_POST['action']) {
+    if (isset($_POST['super_token']) && $_POST['super_token'] == $_SESSION['super_token']) {
+        switch ($_POST['action']) {
 
-        case 'access':
-            $email = strip_tags($_POST['email']);
-            $password = strip_tags($_POST['password']);
+            case 'access':
+                $email = strip_tags($_POST['email']);
+                $password = strip_tags($_POST['password']);
 
-            $authController = new AuthController();
-            $authController->login($email, $password);
-            break;
+                $authController = new AuthController();
+                $authController->login($email, $password);
+                break;
+        }
     }
 }
 var_dump($_POST);
@@ -28,7 +32,7 @@ class AuthController
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => array('email' => $email,'password' => $pwd),
+            CURLOPT_POSTFIELDS => array('email' => $email, 'password' => $pwd),
         ));
 
         $response = curl_exec($curl);
@@ -38,7 +42,7 @@ class AuthController
 
         $response = json_decode($response);
 
-        if (isset($response->code) && $response->code>0) {
+        if (isset($response->code) && $response->code > 0) {
             session_start();
 
             $_SESSION['id'] = $response->data->id;

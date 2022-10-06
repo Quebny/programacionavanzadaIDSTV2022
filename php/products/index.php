@@ -60,21 +60,20 @@ $brand = $brandController->getBrands();
                                             <h6 class="card-subtitle mb-2 text-muted"><?= $product->brand->name ?></h6>
                                             <p class="card-text"><?= $product->description ?></p>
 
-                                            <form method="get" action="../app/ProductsController.php">
+                                            <!-- <form method="get" action="../app/ProductsController.php"> -->
                                                 <div class="row">
-                                                    <a data-product='<?= json_encode($product) ?>' onclick="editProduct($product)" data-bs-toggle="modal" data-bs-target="#addProductModal" href="#" class="btn btn-warning mb-1 col-6">
+                                                    <a data-product='<?= json_encode($product)?>' onclick='<?= json_encode($product) ?>' data-bs-toggle="modal" data-bs-target="#addProductModal" href="#" class="btn btn-warning mb-1 col-6">
                                                         Editar
                                                     </a>
                                                     <a onclick='eliminar(<?= $product->id ?>)' href="#" class="btn btn-danger mb-1 col-6">
                                                         Eliminar
                                                     </a>
-
                                                     <input type="hidden" name="id" value="<?= $product->id ?>" action="">
                                                     <button class="btn btn-info col-12">
                                                         Detalles
                                                         </a>
                                                 </div>
-                                            </form>
+                                            <!-- </form> -->
                                         </div>
                                     </div>
 
@@ -114,32 +113,32 @@ $brand = $brandController->getBrands();
 
                         <p>Slug</p>
                         <div class="input-group mb-3">
-                            <input name="slug" required type="text" class="form-control" placeholder="Slug">
+                            <input id="slug" name="slug" required type="text" class="form-control" placeholder="Slug">
                         </div>
 
                         <p>Descripción</p>
                         <div class="input-group mb-3">
-                            <textarea name="desc" required type="text" class="form-control" placeholder="Descripción" style="height: 100px"></textarea>
+                            <textarea id="desc" name="desc" required type="text" class="form-control" placeholder="Descripción" style="height: 100px"></textarea>
                         </div>
 
                         <p>Características</p>
                         <div class="input-group mb-3">
-                            <input name="chara" required type="text" class="form-control" placeholder="Características">
+                            <input id="chara" name="chara" required type="text" class="form-control" placeholder="Características">
                         </div>
 
                         <p>Marca</p>
                         <div class="input-group mb-3">
-                            <select>
+                            <select id="marca" name="marca">
                                 <?php foreach ($brand as $brand) : ?>
-                                    <option value='<?= $brand->name ?>'><?= $brand->name ?></option>
+                                    <option value='<?= $brand->id ?>'><?= $brand->name ?></option>
                                 <?php endforeach; ?>
                             </select>
-                            <!-- <input name="marca" required type="text" class="form-control" placeholder="Marca"> -->
+
                         </div>
 
                         <p>Imagen</p>
                         <div class="input-group mb-3">
-                            <input name="img" required type="file" class="form-control">
+                            <input id="img" name="img" required type="file" class="form-control">
                         </div>
                     </div>
 
@@ -149,7 +148,7 @@ $brand = $brandController->getBrands();
                         </button>
 
                         <input type="hidden" name="action" value="upload">
-                        <input type="hidden" name="action" value="update">
+                        <!-- <input type="hidden" name="action" value="update"> -->
                         <button type="submit" class="btn btn-primary">
                             Agregar
                         </button>
@@ -204,8 +203,12 @@ $brand = $brandController->getBrands();
             let product = JSON.parse(target.dataset.product);
 
             docuemnt.getElementById('name').value = product.name
+            docuemnt.getElementById('slug').value = product.slug
+            docuemnt.getElementById('desc').value = product.description
+            docuemnt.getElementById('chara').value = product.features
+            docuemnt.getElementById('marca').value = product.brand.id
 
-            // document.getElementById('action').value = 'update / upload'
+            document.getElementById('action').value = 'update'
         }
     </script>
 </body>
