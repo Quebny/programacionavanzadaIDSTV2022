@@ -62,12 +62,14 @@ $brand = $brandController->getBrands();
 
                                             <!-- <form method="get" action="../app/ProductsController.php"> -->
                                                 <div class="row">
-                                                    <a data-product='<?= json_encode($product)?>' onclick='<?= json_encode($product) ?>' data-bs-toggle="modal" data-bs-target="#addProductModal" href="#" class="btn btn-warning mb-1 col-6">
+                                                    <a data-product='<?= json_encode($product)?>' onclick="editProduct(this)" data-bs-toggle="modal" data-bs-target="#addProductModal" href="#" class="btn btn-warning mb-1 col-6">
                                                         Editar
                                                     </a>
                                                     <a onclick='eliminar(<?= $product->id ?>)' href="#" class="btn btn-danger mb-1 col-6">
                                                         Eliminar
                                                     </a>
+                                                    <input type = "hidden" name="super_token" value=<?= $_SESSION['super_token']?>>
+
                                                     <input type="hidden" name="id" value="<?= $product->id ?>" action="">
                                                     <button class="btn btn-info col-12">
                                                         Detalles
@@ -152,7 +154,7 @@ $brand = $brandController->getBrands();
                         <button type="submit" class="btn btn-primary">
                             Agregar
                         </button>
-                        <!-- <input type = "hidden" name="super_token" value=<?= $_SESSION['super_token']?>> ***descomentar*** -->
+                        <input type = "hidden" name="super_token" value=<?= $_SESSION['super_token']?>>
                     </div>
 
                 </form>
@@ -183,7 +185,8 @@ $brand = $brandController->getBrands();
 
                         bodyFormData.append('id', id);
                         bodyFormData.append('action', 'delete');
-                        bodyFormData.append('action', 'delete'); //super token
+                        bodyFormData.append('super_token', '<?= $_SESSION['super_token']?>');
+                        
 
                         axios.post('../app/ProductsController.php', bodyFormData)
                             .then(function(response) {
@@ -210,7 +213,8 @@ $brand = $brandController->getBrands();
             docuemnt.getElementById('slug').value = product.slug
             docuemnt.getElementById('desc').value = product.description
             docuemnt.getElementById('chara').value = product.features
-            docuemnt.getElementById('marca').value = product.brand.id
+
+            document.getElementById('id').value = product.id
 
             document.getElementById('action').value = 'update'
         }

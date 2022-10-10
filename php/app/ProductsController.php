@@ -1,38 +1,40 @@
 <?php
-    include_once "config.php";
+include_once "config.php";
 
 if (isset($_POST["action"])) {
-    switch ($_POST["action"]) {
+    if (isset($_POST['super_token']) && $_POST['super_token'] == $_SESSION['super_token']) {
+        switch ($_POST["action"]) {
 
-        case 'upload':
-            $name = strip_tags($_POST['name']);
-            $slug = strip_tags($_POST['slug']);
-            $desc = strip_tags($_POST['desc']);
-            $chara = strip_tags($_POST['chara']);
-            $marca = strip_tags($_POST['marca']);
-            $img = strip_tags($_POST['img']);
+            case 'upload':
+                $name = strip_tags($_POST['name']);
+                $slug = strip_tags($_POST['slug']);
+                $desc = strip_tags($_POST['desc']);
+                $chara = strip_tags($_POST['chara']);
+                $marca = strip_tags($_POST['marca']);
+                $img = strip_tags($_POST['img']);
 
-            $productsController = new ProductsController();
-            $productsController -> createProduct($name, $slug, $desc, $chara, $marca, $img);
-            break;
+                $productsController = new ProductsController();
+                $productsController->createProduct($name, $slug, $desc, $chara, $marca, $img);
+                break;
 
-        case 'delete':
-            $id = strip_tags($_POST['id']);
+            case 'delete':
+                $id = strip_tags($_POST['id']);
 
-            $productsController = new ProductsController();
-            $productsController -> remove($id);
+                $productsController = new ProductsController();
+                $productsController->remove($id);
 
-            echo json_encode($productsController->remove($id));
+                echo json_encode($productsController->remove($id));
 
-            break;
+                break;
+        }
     }
 }
 if (isset($_GET["id"])) {
     $productsController = new ProductsController();
-    $productsController -> getDetails($_GET["id"]);
+    $productsController->getDetails($_GET["id"]);
 }
 
-var_dump($_POST);
+// var_dump($_POST);
 class ProductsController
 {
     public function getProducts()
@@ -96,16 +98,16 @@ class ProductsController
 
         curl_close($curl);
 
-        var_dump($response);
+        // var_dump($response);
 
 
         $response = json_decode($response);
 
-        // if (isset($response->code) && $response->code > 0) {
-        //     header("Location:../products/index.php");
-        // } else {
-        //     header("Location:../products/error.php");
-        // }
+        if (isset($response->code) && $response->code > 0) {
+            header("Location:".BASE_PATH."/products?success");
+        } else {
+            header("Location:".BASE_PATH."/products?error");
+        }
     }
 
     public function getDetails($id)
@@ -125,18 +127,20 @@ class ProductsController
                 'Authorization: Bearer ' . $_SESSION['token']
             ),
         ));
-
+        
         $response = curl_exec($curl);
 
         curl_close($curl);
         // echo $response;
-
+        echo ("hokla");
+        
+        var_dump($response);
         $response = json_decode($response);
         // echo $response->data->slug;
         if (isset($response->code) && $response->code > 0) {
-            header("Location:../products/detalles.php?" . $response->data->slug);
+            header("Location:".BASE_PATH."/products?success".$response->data->slug);
         } else {
-            header("Location:../products/error.php");
+            header("Location:".BASE_PATH."/products?error");
         }
     }
 
@@ -163,7 +167,7 @@ class ProductsController
         curl_close($curl);
         // echo $response;
 
-        var_dump($response);
+        // var_dump($response);
 
         $response = json_decode($response);
 
